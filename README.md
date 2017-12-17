@@ -350,29 +350,8 @@ y = data_df.groupby('city')['fare'].mean()
 #z = data_df.groupby('city')['driver_count'].count()
 # z
 # city_csv.head()
-# pd.Series(city_csv['driver_count'])
+#pd.Series(city_csv['driver_count'])
 
-```
-
-
-```python
-
-#Adding my data(x, y, x, c) for plotting the bubble 
-#to the existing dataframe my_data_df with respective series data.
-
-color_schema = (lambda x: "lightcoral" if x=="Urban" else ("lightskyblue" if x=="Suburban" else "gold"))
-
-my_data_df['Total_#_of_rides'] = pd.Series(x).values
-my_data_df['Average_Fare'] = pd.Series(y).values 
-# my_data_df['correlate_w_circle_size'] = pd.Series(z).values
-my_data_df['Coloring'] = my_data_df.type.apply(color_schema) 
-#my_data_df
-
-#ordersort = my_data_df.sort_values('city', ascending = True).head()
-#ordersort
-
-#my_data_df = pd.concat([x, y, z], axis=1).reset_index()
-#my_data_df
 ```
 
 
@@ -394,22 +373,30 @@ def color_schema(x):
     elif x=="Rural": 
         col = "gold"
     return col
-
 ```
 
 
 ```python
+#z = []
+#z = [city_csv['city']]
+#index = pd.Series(city_csv['city']).values
+ 
+```
 
-# new_df.apply(new_df.in)
-#new_df.index
-z = pd.Series(z.index, index=z.index).apply(get_number_of_drivers)
+
+```python
+#Here I am mapping the city to city to get the correct values for all the driver count, coloring and average
+ 
+z = city_csv['city'].values
+ 
+z = pd.Series(z, index=z).apply(get_number_of_drivers)
 city_type = pd.Series(z.index, index=z.index).apply(get_city_type)
 color = pd.Series(city_type, index=z.index).apply(color_schema)
 new_df = pd.concat([x,y,z,city_type, color], keys=["number_of_rides", "avg_fare", "driver_count", "type", "color"] , axis=1)
 
 # new_df.concat([z], axis=1)
 new_df.head()
-
+  
 ```
 
 
@@ -438,14 +425,6 @@ new_df.head()
       <th>driver_count</th>
       <th>type</th>
       <th>color</th>
-    </tr>
-    <tr>
-      <th>city</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -497,11 +476,34 @@ new_df.head()
 
 
 ```python
+z.index
+```
+
+
+
+
+    Index(['Kelseyland', 'Nguyenbury', 'East Douglas', 'West Dawnfurt',
+           'Rodriguezburgh', 'South Josephville', 'West Sydneyhaven',
+           'Travisville', 'Torresshire', 'Lisaville',
+           ...
+           'Kennethburgh', 'South Joseph', 'Manuelchester', 'Stevensport',
+           'North Whitney', 'East Stephen', 'East Leslie', 'Hernandezshire',
+           'Horneland', 'West Kevintown'],
+          dtype='object', length=125)
+
+
+
+
+```python
 # This is my data frame generated with all the above data
 #arr = my_data_df['driver_count']
 #arr[0:125]
 #arr = arr.tolist()
+#success = city_csv.groupby('city')
 
+#city_csv['city'].index 
+#city_csv.loc[city_csv.city == "Alvarezhaven"] 
+#city_csv
 ```
 
 
@@ -512,8 +514,32 @@ fig.suptitle
 plt.title("Pyber Ride Sharing Data (2016)",fontsize=16, fontweight="bold" )
 plt.xlabel("Total Number of Rides (Per City)")
 plt.ylabel("Average Fare ($)") 
+
  
-# Create a handle for each plot
+#Trying to create the labels inside the plt with Urban, Suburban, Rural
+#Not working, will work on it later, as I have been working very hard on this project for vurning night lamps for days.
+
+# Tell matplotlib to create a scatter plot based upon the above data
+#ax.scatter(x=new_df['number_of_rides'], 
+#           y=new_df['avg_fare'], 
+#           s=new_df['driver_count']*10, 
+#           c='lightcoral', 
+#           alpha=0.4, linewidths=2, edgecolor="black", label = "Urban")
+
+# Tell matplotlib to create a scatter plot based upon the above data
+#ax.scatter(x=new_df['number_of_rides'], 
+#           y=new_df['avg_fare'], 
+#           s=new_df['driver_count']*10, 
+#           c='lightskyblue', 
+#           alpha=0.4, linewidths=2, edgecolor="black", label = "Suburban")
+
+# Tell matplotlib to create a scatter plot based upon the above data
+#ax.scatter(x=new_df['number_of_rides'], 
+#           y=new_df['avg_fare'], 
+#           s=new_df['driver_count']*10, 
+#           c='gold', 
+#           alpha=0.4, linewidths=2, edgecolor="black", label = "Rural")
+
  
 # Tell matplotlib to create a scatter plot based upon the above data
 ax.scatter(x=new_df['number_of_rides'], 
@@ -551,7 +577,7 @@ plt.show()
 ```
 
 
-![png](Pyber_files/Pyber_15_0.png)
+![png](Pyber_files/Pyber_16_0.png)
 
 
 
@@ -597,9 +623,9 @@ plt.pie(sizefare, explode=explode, labels=labels, colors=colors,
 
 
 
-    ([<matplotlib.patches.Wedge at 0x10f7c78d0>,
-      <matplotlib.patches.Wedge at 0x10f7a7550>,
-      <matplotlib.patches.Wedge at 0x110989358>],
+    ([<matplotlib.patches.Wedge at 0x116818208>,
+      <matplotlib.patches.Wedge at 0x116818c18>,
+      <matplotlib.patches.Wedge at 0x1168216d8>],
      [Text(-0.34391,-1.14966,'Urban'),
       Text(0.527875,0.965064,'Suburban'),
       Text(-0.676864,0.867095,'Rural')],
@@ -618,7 +644,7 @@ plt.show()
 ```
 
 
-![png](Pyber_files/Pyber_18_0.png)
+![png](Pyber_files/Pyber_19_0.png)
 
 
 
@@ -669,9 +695,9 @@ plt.pie(sizeride, explode=explode, labels=labels, colors=colors,
 
 
 
-    ([<matplotlib.patches.Wedge at 0x11916a470>,
-      <matplotlib.patches.Wedge at 0x11916ae48>,
-      <matplotlib.patches.Wedge at 0x119170908>],
+    ([<matplotlib.patches.Wedge at 0x1168bd908>,
+      <matplotlib.patches.Wedge at 0x1168c6358>,
+      <matplotlib.patches.Wedge at 0x1168c6dd8>],
      [Text(-0.143,-1.19145,'Urban'),
       Text(0.308955,1.05572,'Suburban'),
       Text(-0.71486,0.836048,'Rural')],
@@ -690,7 +716,7 @@ plt.show()
 ```
 
 
-![png](Pyber_files/Pyber_22_0.png)
+![png](Pyber_files/Pyber_23_0.png)
 
 
 
@@ -737,9 +763,9 @@ plt.pie(sizedriver, explode=explode, labels=labels, colors=colors,
 
 
 
-    ([<matplotlib.patches.Wedge at 0x11921b240>,
-      <matplotlib.patches.Wedge at 0x11921bc18>,
-      <matplotlib.patches.Wedge at 0x1192246d8>],
+    ([<matplotlib.patches.Wedge at 0x11696e0f0>,
+      <matplotlib.patches.Wedge at 0x11696eb00>,
+      <matplotlib.patches.Wedge at 0x1169745c0>],
      [Text(0.195082,-1.18404,'Urban'),
       Text(-0.0703722,1.09775,'Suburban'),
       Text(-0.768421,0.787101,'Rural')],
@@ -758,7 +784,7 @@ plt.show()
 ```
 
 
-![png](Pyber_files/Pyber_25_0.png)
+![png](Pyber_files/Pyber_26_0.png)
 
 
 
@@ -803,9 +829,9 @@ plt.pie(sizecity, explode=explode, labels=labels, colors=colors,
 
 
 
-    ([<matplotlib.patches.Wedge at 0x11d6a8a20>,
-      <matplotlib.patches.Wedge at 0x11d6b2438>,
-      <matplotlib.patches.Wedge at 0x11d6b2eb8>],
+    ([<matplotlib.patches.Wedge at 0x116cfb470>,
+      <matplotlib.patches.Wedge at 0x116cfbe80>,
+      <matplotlib.patches.Wedge at 0x116d03940>],
      [Text(-0.687605,-0.983463,'Urban'),
       Text(0.960963,0.535304,'Suburban'),
       Text(-0.448813,1.00427,'Rural')],
@@ -824,5 +850,5 @@ plt.show()
 ```
 
 
-![png](Pyber_files/Pyber_28_0.png)
+![png](Pyber_files/Pyber_29_0.png)
 
